@@ -1,7 +1,13 @@
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { BrowserModule, bootstrapApplication } from '@angular/platform-browser';
+import { AppComponent } from './app/app.component';
+import { importProvidersFrom } from '@angular/core';
+import { provideAnimations } from '@angular/platform-browser/animations';
 
-import { AppModule } from './app/app.module';
+const bootstrapPromise = bootstrapApplication(AppComponent, {
+  providers: [importProvidersFrom(BrowserModule), provideAnimations()],
+});
 
-
-platformBrowserDynamic().bootstrapModule(AppModule)
-  .catch(err => console.error(err));
+// Logging bootstrap information
+bootstrapPromise
+  .then(() => console.log(`Bootstrap success`))
+  .catch((err) => console.error(err));
