@@ -12,26 +12,28 @@ export class ExcelService {
   constructor() {}
 
   private generateSubHeaders(weeks: Array<Date[]>) {
-    const subHeaders: string[] = new Array(
-      excel.timesheetSummaryHeaders.length
-    ).fill('');
+    const headers = [...excel.timesheetSummaryHeaders];
+    const subHeaders: string[] = new Array(headers.length).fill('');
     weeks.forEach((week: Date[], index: number) => {
       week.forEach((day: Date) => {
-        excel.timesheetSummaryHeaders.push(day.getDate().toString());
+        headers.push(day.getDate().toString());
         subHeaders.push('');
       });
-      excel.timesheetSummaryHeaders.push(`Week #${index + 1}`);
+      headers.push(`Week #${index + 1}`);
       subHeaders.push('Total');
       if (index === weeks.length - 1) {
-        excel.timesheetSummaryHeaders.push('Total');
+        headers.push('Total');
         subHeaders.push('');
       }
     });
-
-    return subHeaders;
+    return [headers, subHeaders];
   }
 
-  private formatHeaders(subHeaders: string[], timesheetSummary: Worksheet) {
+  private formatHeaders(
+    headers: string[],
+    subHeaders: string[],
+    timesheetSummary: Worksheet
+  ) {
     subHeaders.forEach((subHeader: string, index: number) => {
       const topCell = `${numberToColumn(index + 1)}${1}`;
       const bottomCell = `${numberToColumn(index + 1)}${2}`;
@@ -41,7 +43,7 @@ export class ExcelService {
       timesheetSummary.getCell(topCell).border = excel.borderStyle;
       if (!subHeader.length) {
         timesheetSummary.mergeCells(`${topCell}:${bottomCell}`);
-        if (excel.timesheetSummaryHeaders[index] === 'Total') {
+        if (headers[index] === 'Total') {
           timesheetSummary.getCell(topCell).fill = {
             ...excel.cellStyle,
             fgColor: { argb: Colors.YELLOW },
@@ -188,16 +190,17 @@ export class ExcelService {
     )} ${longMonth}, ${year} - ${getOrdinalMonth(
       dateRange[1]
     )} ${longMonth}, ${year}]`;
-    const subHeaders: string[] = this.generateSubHeaders(weeks);
+    const [headers, subHeaders]: Array<string[]> =
+      this.generateSubHeaders(weeks);
 
     const timesheetSummary = workbook.addWorksheet(
       `Timesheet-Summary-${shortMonth}${year}`
     );
 
-    timesheetSummary.addRow(excel.timesheetSummaryHeaders);
+    timesheetSummary.addRow(headers);
     timesheetSummary.addRow(subHeaders);
 
-    this.formatHeaders(subHeaders, timesheetSummary);
+    this.formatHeaders(headers, subHeaders, timesheetSummary);
 
     const calendarDetails: string[] = this.generateCalendarDetails({
       ...formJSON,

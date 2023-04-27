@@ -1,0 +1,16 @@
+<form [formGroup]="form">
+    <div class="card mt-4 flex flex-row justify-content-center flex-wrap">
+        <h2>Activities and Deliverables</h2>
+    </div>
+
+    <div class="flex flex-column flex-grow-1" formArrayName="activities">
+        <div class="flex flex-row flex-grow-1" *ngFor="let activity of activities.controls; let i = index">
+            <div class="flex flex-column flex-grow-1"></div>
+            <div class="flex flex-column flex-grow-1">
+                <h3>Week {{i + 1}}</h3>
+                <textarea rows="5" cols="30" pInputTextarea [formControlName]="i"></textarea>
+            </div>
+            <div class="flex flex-column flex-grow-1"></div>
+        </div>
+    </div>
+</form>

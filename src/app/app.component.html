@@ -9,64 +9,14 @@
   </div>
 </div>
 
-<form [formGroup]="form">
-  <div class="flex">
-    <div class="flex flex-column flex-grow-1"></div>
-    <div class="flex flex-column flex-grow-1 mx-3">
-      <h3 class="required">Resource Name</h3>
-      <input type="text" pInputText formControlName="name" class="name" />
-      <h3 class="required">Project Name</h3>
-      <input type="text" pInputText formControlName="project" />
-      <h3 class="required">Approver Name</h3>
-      <input type="text" pInputText formControlName="approver" />
-      <h3 class="required">Activity Summary</h3>
-      <textarea rows="4" pInputTextarea formControlName="activity"></textarea>
-    </div>
-    <div class="flex flex-column flex-grow-1 mx-3">
-      <h3 class="required">Month and Year</h3>
-      <p-calendar formControlName="date" view="month" dateFormat="MM yy" [readonlyInput]="true" [showButtonBar]="true"
-        [style]="{'width':'100%'}"></p-calendar>
-      <h3>Leaves</h3>
-      <p-calendar formControlName="calendarFullLeaves" selectionMode="multiple" [readonlyInput]="true"
-        [minDate]="dateRange[0]" [maxDate]="dateRange[1]" [showButtonBar]="true" [disabledDays]="disabledDays"
-        [disabledDates]="disabledDates.fullLeaves" [style]="{'width':'100%'}"></p-calendar>
-      <h3>Half Day</h3>
-      <p-calendar formControlName="calendarHalfLeaves" selectionMode="multiple" [readonlyInput]="true"
-        [minDate]="dateRange[0]" [maxDate]="dateRange[1]" [showButtonBar]="true" [disabledDays]="disabledDays"
-        [disabledDates]="disabledDates.halfLeaves" [style]="{'width':'100%'}"></p-calendar>
-      <h3>Holidays</h3>
-      <p-calendar formControlName="calendarHolidays" selectionMode="multiple" [readonlyInput]="true"
-        [minDate]="dateRange[0]" [maxDate]="dateRange[1]" [showButtonBar]="true" [disabledDays]="disabledDays"
-        [disabledDates]="disabledDates.holidays" [style]="{'width':'100%'}"></p-calendar>
-    </div>
-    <div class="flex flex-column flex-grow-1"></div>
-  </div>
-
-  <ng-container *ngIf="activities.length">
-    <div class="card mt-4 flex flex-row justify-content-center flex-wrap">
-      <h2>Activities and Deliverables</h2>
-    </div>
-
-    <div class="flex flex-column flex-grow-1" formArrayName="activities">
-      <div class="flex flex-row flex-grow-1" *ngFor="let activity of activities.controls; let i = index">
-        <div class="flex flex-column flex-grow-1"></div>
-        <div class="flex flex-column flex-grow-1">
-          <h3>Week {{i + 1}}</h3>
-          <textarea rows="5" cols="30" pInputTextarea [formControlName]="i"></textarea>
-        </div>
-        <div class="flex flex-column flex-grow-1"></div>
-      </div>
-    </div>
-  </ng-container>
-
-</form>
-
+<app-timesheet-form [form]="form" [activities]="activities" [dateRange]="dateRange" [disabledDays]="disabledDays"
+  [disabledDates]="disabledDates"></app-timesheet-form>
 
 <div class="card my-6 flex flex-row justify-content-center flex-wrap">
   <div class="flex flex-column align-items-end mr-4">
     <p-button label="Clear" (click)="clear()"></p-button>
   </div>
   <div class="flex flex-column ">
-    <p-button label="Generate" [loading]="loading" (click)="generate()" [disabled]="!form.valid"></p-button>
+    <p-button label="Generate" (click)="generate()" [disabled]="!form.valid"></p-button>
   </div>
 </div>

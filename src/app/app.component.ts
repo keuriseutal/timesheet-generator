@@ -20,6 +20,7 @@ import { ThemeService } from './core/services/theme.service';
 import { Theme } from './core/enums';
 import { getDateRange, getWeeksInAMonth } from './core/utils';
 import { DisabledDates, ThemeOptions } from './core/types';
+import { TimesheetFormComponent } from './components/timesheet-form/timesheet-form.component';
 
 @Component({
   selector: 'app-root',
@@ -36,6 +37,7 @@ import { DisabledDates, ThemeOptions } from './core/types';
     ButtonModule,
     InputTextModule,
     InputTextareaModule,
+    TimesheetFormComponent,
   ],
 })
 export class AppComponent implements OnInit, OnDestroy {
@@ -45,7 +47,6 @@ export class AppComponent implements OnInit, OnDestroy {
   ];
 
   theme: string = Theme.LIGHT;
-  loading: boolean = false;
   destroy$ = new Subject<void>();
 
   form!: FormGroup;
@@ -243,7 +244,6 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   clear() {
-    this.loading = false;
     this.dateRange = [];
     this.disabledDates = {
       holidays: [],
